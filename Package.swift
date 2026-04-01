@@ -16,6 +16,11 @@ let package = Package(
                 .product(name: "MarkdownUI", package: "swift-markdown-ui")
             ],
             path: ".",
+            exclude: [
+                "README.md",
+                "install.sh",
+                "com.onthisday.plist"
+            ],
             sources: [
                 "OnThisDayApp.swift",
                 "ContentView.swift",
