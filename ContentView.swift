@@ -5,48 +5,83 @@ struct ContentView: View {
     @State private var selectedDate = Date()
 
     var body: some View {
-        NavigationSplitView {
-            VStack(spacing: 20) {
-                Text("On This Day")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top)
+        VStack(spacing: 0) {
+            // Header with navigation
+            HStack {
+                Button(action: previousDay) {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                }
+                .buttonStyle(.plain)
+                .help("Previous day")
+
+                Spacer()
+
+                VStack(spacing: 4) {
+                    Text("On This Day")
+                        .font(.headline)
+
+                    Text(formattedSelectedDate)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Button(action: nextDay) {
+                    Image(systemName: "chevron.right")
+                        .font(.title2)
+                }
+                .buttonStyle(.plain)
+                .help("Next day")
+            }
+            .padding()
+            .background(Color(nsColor: .windowBackgroundColor))
+
+            Divider()
+
+            // Compact date picker
+            HStack {
+                Text("Date:")
+                    .foregroundColor(.secondary)
 
                 DatePicker(
-                    "Select Date",
+                    "",
                     selection: $selectedDate,
                     displayedComponents: [.date]
                 )
-                .datePickerStyle(.graphical)
-                .padding()
+                .datePickerStyle(.field)
+                .labelsHidden()
                 .onChange(of: selectedDate) { oldValue, newValue in
                     loadEntries(for: newValue)
                 }
 
-                Text("Found \(journalManager.entries.count) entries")
+                Spacer()
+
+                Text("\(journalManager.entries.count) entries")
                     .font(.caption)
                     .foregroundColor(.secondary)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 12)
 
-                Spacer()
-            }
-            .frame(minWidth: 300, idealWidth: 350)
-            .onAppear {
-                loadEntries(for: selectedDate)
-            }
-        } detail: {
+            Divider()
+
+            // Entries list
             if journalManager.entries.isEmpty {
                 VStack {
+                    Spacer()
                     Image(systemName: "book.closed")
-                        .font(.system(size: 60))
+                        .font(.system(size: 40))
                         .foregroundColor(.secondary)
                     Text("No entries for this day")
-                        .font(.title2)
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
+                    Spacer()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 30) {
+                    VStack(alignment: .leading, spacing: 20) {
                         ForEach(journalManager.entries) { entry in
                             EntryView(entry: entry)
                         }
@@ -55,6 +90,16 @@ struct ContentView: View {
                 }
             }
         }
+        .frame(width: 500, height: 700)
+        .onAppear {
+            loadEntries(for: selectedDate)
+        }
+    }
+
+    private var formattedSelectedDate: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d"
+        return formatter.string(from: selectedDate)
     }
 
     private func loadEntries(for date: Date) {
@@ -62,6 +107,18 @@ struct ContentView: View {
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
         journalManager.loadEntriesForDate(month: month, day: day)
+    }
+
+    private func previousDay() {
+        if let newDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) {
+            selectedDate = newDate
+        }
+    }
+
+    private func nextDay() {
+        if let newDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) {
+            selectedDate = newDate
+        }
     }
 }
 

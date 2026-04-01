@@ -1,13 +1,16 @@
 # On This Day
 
-A SwiftUI macOS app that shows all your journal entries for any given day across all years.
+A SwiftUI macOS menubar app that shows all your journal entries for any given day across all years.
 
 ## Features
 
 - 📅 Interactive calendar to select any date
-- 📖 Displays all journal entries from that day across different years
-- ✨ Beautiful markdown rendering
-- 🎨 Native macOS design with split view
+- ⏰ Shows time from frontmatter if present
+- 📖 Displays all journal entries from that day across different years (newest first)
+- ✨ Beautiful markdown rendering (frontmatter stripped)
+- ◀️ ▶️ Previous/Next day navigation buttons
+- 🎯 Lives in your menubar for quick access
+- 🎨 Native macOS design
 
 ## Requirements
 
@@ -24,6 +27,8 @@ cd /tmp/onthisday
 swift run
 ```
 
+The app will appear in your menubar as a book icon. Click it to open the popover.
+
 ### Option 2: Open in Xcode
 
 1. Open Xcode
@@ -38,7 +43,14 @@ The app reads journal entries from:
 /Users/travis/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/journal
 ```
 
-When you select a date (e.g., March 31), it will show all entries from that day across all years (2016-03-31, 2017-03-31, 2018-03-31, etc.).
+When you select a date (e.g., March 31), it will show all entries from that day across all years (2026-03-31, 2019-03-31, 2018-03-31, etc.), sorted from newest to oldest.
+
+### Frontmatter Support
+
+The app parses YAML frontmatter and:
+- Extracts time from `date` field (e.g., `date: 2026-03-31T21:37`)
+- Strips frontmatter from displayed content
+- Shows time below the date if present
 
 ## Configuration
 

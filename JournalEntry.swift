@@ -3,6 +3,8 @@ import Foundation
 struct JournalEntry: Identifiable {
     let id = UUID()
     let date: Date
+    let time: String?
+    let title: String?
     let content: String
     let filePath: URL
 
