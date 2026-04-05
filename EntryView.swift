@@ -3,26 +3,28 @@ import MarkdownUI
 
 struct EntryView: View {
     let entry: JournalEntry
+    @State private var isHovering = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with title/year and date
             HStack(alignment: .top) {
-                if let title = entry.title {
-                    Button(action: openInObsidian) {
-                        Text(title)
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.blue)
-                            .underline()
-                    }
-                    .buttonStyle(.plain)
-                    .help("Open in Obsidian")
-                } else {
-                    Text(String(entry.year))
-                        .font(.title)
+                Button(action: openInObsidian) {
+                    Text(entry.title ?? String(entry.year))
+                        .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(.blue)
+                        .foregroundStyle(.tint)
+                        .underline(isHovering)
+                }
+                .buttonStyle(.plain)
+                .help("Open in Obsidian")
+                .onHover { hovering in
+                    isHovering = hovering
+                    if hovering {
+                        NSCursor.pointingHand.push()
+                    } else {
+                        NSCursor.pop()
+                    }
                 }
 
                 Spacer()
