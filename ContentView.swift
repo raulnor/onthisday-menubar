@@ -1,10 +1,18 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var journalManager = JournalManager()
+    @EnvironmentObject var journalManager: JournalManager
     @State private var selectedDate = Date()
 
     var body: some View {
+        if journalManager.journalPath == nil {
+            SetupView(journalManager: journalManager)
+        } else {
+            mainView
+        }
+    }
+
+    private var mainView: some View {
         VStack(spacing: 0) {
             // Header with navigation
             HStack {
@@ -122,6 +130,3 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView()
-}

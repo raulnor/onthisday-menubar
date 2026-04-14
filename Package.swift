@@ -24,6 +24,7 @@ let package = Package(
             sources: [
                 "OnThisDayApp.swift",
                 "ContentView.swift",
+                "SetupView.swift",
                 "EntryView.swift",
                 "JournalEntry.swift",
                 "JournalManager.swift"

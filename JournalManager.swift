@@ -2,22 +2,36 @@ import Foundation
 
 class JournalManager: ObservableObject {
     @Published var entries: [JournalEntry] = []
+    @Published var journalPath: URL?
 
-    private let journalPath: URL
     private let dateFormatter: DateFormatter
+    private let userDefaultsKey = "journalFolderPath"
 
     init() {
-        // Path to your journal directory
-        self.journalPath = URL(fileURLWithPath: "/Users/travis/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/journal")
+        // Load path from UserDefaults
+        if let savedPath = UserDefaults.standard.string(forKey: userDefaultsKey) {
+            self.journalPath = URL(fileURLWithPath: savedPath)
+        } else {
+            self.journalPath = nil
+        }
 
         // Date formatter for parsing file names
         self.dateFormatter = DateFormatter()
         self.dateFormatter.dateFormat = "yyyy-MM-dd"
     }
 
+    func setJournalPath(_ url: URL) {
+        self.journalPath = url
+        UserDefaults.standard.set(url.path, forKey: userDefaultsKey)
+    }
+
     /// Load all entries for a specific month and day across all years
     func loadEntriesForDate(month: Int, day: Int) {
         entries.removeAll()
+
+        guard let journalPath = journalPath else {
+            return
+        }
 
         do {
             let fileManager = FileManager.default

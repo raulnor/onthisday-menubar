@@ -1,6 +1,6 @@
 # On This Day
 
-A SwiftUI macOS menubar app that shows all your journal entries for any given day across all years.
+A SwiftUI macOS menubar app that shows all your journal entries for any given day across all years. Vibe coded.
 
 ## Features
 
@@ -38,11 +38,6 @@ The app will appear in your menubar as a book icon. Click it to open the popover
 
 ## How It Works
 
-The app reads journal entries from:
-```
-/Users/travis/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/journal
-```
-
 When you select a date (e.g., March 31), it will show all entries from that day across all years (2026-03-31, 2019-03-31, 2018-03-31, etc.), sorted from newest to oldest.
 
 ### Frontmatter Support
@@ -52,6 +47,3 @@ The app parses YAML frontmatter and:
 - Strips frontmatter from displayed content
 - Shows time below the date if present
 
-## Configuration
-
-To change the journal directory path, edit `JournalManager.swift` and update the `journalPath` variable.
