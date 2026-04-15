@@ -19,8 +19,11 @@ struct ContentView: View {
                 Button(action: previousDay) {
                     Image(systemName: "chevron.left")
                         .font(.title2)
+                        .padding(12)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .padding(-12)
                 .help("Previous day")
 
                 Spacer()
@@ -39,8 +42,11 @@ struct ContentView: View {
                 Button(action: nextDay) {
                     Image(systemName: "chevron.right")
                         .font(.title2)
+                        .padding(12)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .padding(-12)
                 .help("Next day")
             }
             .padding()
