@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var journalManager: JournalManager
     @State private var selectedDate = Date()
+    @FocusState private var isDatePickerFocused: Bool
 
     var body: some View {
         if journalManager.journalPath == nil {
@@ -24,6 +25,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.plain)
                 .padding(-12)
+                .keyboardShortcut(.leftArrow, modifiers: [])
                 .help("Previous day")
 
                 Spacer()
@@ -47,6 +49,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.plain)
                 .padding(-12)
+                .keyboardShortcut(.rightArrow, modifiers: [])
                 .help("Next day")
             }
             .padding()
@@ -66,6 +69,7 @@ struct ContentView: View {
                 )
                 .datePickerStyle(.field)
                 .labelsHidden()
+                .focused($isDatePickerFocused)
                 .onChange(of: selectedDate) { oldValue, newValue in
                     loadEntries(for: newValue)
                 }
@@ -105,8 +109,12 @@ struct ContentView: View {
             }
         }
         .frame(width: 500, height: 700)
+        .focusable(false)
         .onAppear {
             loadEntries(for: selectedDate)
+            DispatchQueue.main.async {
+                isDatePickerFocused = false
+            }
         }
     }
 
