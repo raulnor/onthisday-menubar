@@ -35,6 +35,17 @@ cat > "$CONTENTS_DIR/Info.plist" << 'EOF'
     <string>1.0</string>
     <key>LSUIElement</key>
     <true/>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>On This Day URL</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>onthisday</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>
 EOF

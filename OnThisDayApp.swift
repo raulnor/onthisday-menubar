@@ -10,15 +10,24 @@ import SwiftUI
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var statusItem: NSStatusItem?
     var popover: NSPopover?
     var journalManager = JournalManager()
+    var mainWindow: NSWindow?
 
     static var shared: AppDelegate?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.shared = self
+
+        // Register URL handler
+        NSAppleEventManager.shared().setEventHandler(
+            self,
+            andSelector: #selector(handleURLEvent(_:withReplyEvent:)),
+            forEventClass: AEEventClass(kInternetEventClass),
+            andEventID: AEEventID(kAEGetURL)
+        )
 
         NSApp.setActivationPolicy(.accessory) // Policy to allow modal dialogs
 
@@ -108,5 +117,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func quit() {
         NSApplication.shared.terminate(nil)
+    }
+
+    @objc func handleURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        guard let urlString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue,
+              let url = URL(string: urlString),
+              url.scheme == "onthisday" else {
+            return
+        }
+
+        showMainWindow()
+
+        // Check if the URL path is "today"
+        if url.host == "today" || url.path == "/today" {
+            NotificationCenter.default.post(name: NSNotification.Name("JumpToToday"), object: nil)
+        }
+    }
+
+    func showMainWindow() {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
+
+        if mainWindow == nil {
+            let window = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 500, height: 700),
+                styleMask: [.titled, .closable, .miniaturizable, .resizable],
+                backing: .buffered,
+                defer: false
+            )
+            window.title = "Journal"
+            window.center()
+            window.contentView = NSHostingView(rootView: ContentView().environmentObject(journalManager))
+            window.isReleasedWhenClosed = false
+            window.delegate = self
+
+            mainWindow = window
+        }
+
+        mainWindow?.makeKeyAndOrderFront(nil)
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        // Return to accessory mode when window is closed
+        NSApp.setActivationPolicy(.accessory)
     }
 }

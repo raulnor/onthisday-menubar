@@ -116,6 +116,9 @@ struct ContentView: View {
                 isDatePickerFocused = false
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("JumpToToday"))) { _ in
+            selectedDate = Date()
+        }
     }
 
     private var formattedSelectedDate: String {
