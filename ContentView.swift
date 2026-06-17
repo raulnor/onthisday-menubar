@@ -101,7 +101,7 @@ struct ContentView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         ForEach(journalManager.entries) { entry in
-                            EntryView(entry: entry)
+                            JournalView(entry: entry)
                         }
                     }
                     .padding()

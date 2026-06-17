@@ -40,6 +40,6 @@ struct SetupView: View {
 
     private func showFolderPicker() {
         // Call the AppDelegate's folder picker method
-        AppDelegate.shared?.showFolderPicker()
+        AppDelegate.shared?.showJournalFolderPicker()
     }
 }

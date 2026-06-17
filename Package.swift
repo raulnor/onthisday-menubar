@@ -25,9 +25,12 @@ let package = Package(
                 "OnThisDayApp.swift",
                 "ContentView.swift",
                 "SetupView.swift",
-                "EntryView.swift",
+                "JournalView.swift",
                 "JournalEntry.swift",
-                "JournalManager.swift"
+                "JournalManager.swift",
+                "Note.swift",
+                "NoteView.swift",
+                "NoteManager.swift"
             ]
         )
     ]

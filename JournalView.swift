@@ -1,7 +1,7 @@
 import SwiftUI
 import MarkdownUI
 
-struct EntryView: View {
+struct JournalView: View {
     let entry: JournalEntry
     @State private var isHovering = false
 
@@ -9,7 +9,9 @@ struct EntryView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with title/year and date
             HStack(alignment: .top) {
-                Button(action: openInObsidian) {
+                Button(action: {
+                    openInObsidian(entry.filePath)
+                }) {
                     Text(entry.title ?? String(entry.year))
                         .font(.title2)
                         .fontWeight(.bold)
@@ -58,18 +60,5 @@ struct EntryView: View {
                 .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
         )
     }
-
-    private func openInObsidian() {
-        // Create obsidian:// URL to open the file
-        let fileName = entry.filePath.deletingPathExtension().lastPathComponent
-        let vaultName = "Vault"
-        let filePath = "journal/\(fileName)"
-
-        // Obsidian URI format: obsidian://open?vault=VaultName&file=path/to/file
-        let urlString = "obsidian://open?vault=\(vaultName)&file=\(filePath)"
-
-        if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? urlString) {
-            NSWorkspace.shared.open(url)
-        }
-    }
 }
+
